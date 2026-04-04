@@ -168,26 +168,7 @@ PRs welcome! Especially:
 
 ---
 
-## 📜 License
 
-[MIT License](LICENSE) — 随便用，记得给个 Star ⭐
-
-MIT License — Use freely, and give us a Star ⭐ if it helps!
-
----
-
-## 📬 联系我们 | Contact
-
-| | |
-|---|---|
-| **公司** Company | 源子（深圳）人工智能有限公司 / Yuanzi AI |
-| **联系人** Contact | Neil |
-| **微信** WeChat | `838000702` |
-| **公众号** Official Account | **源子AI Metainflow** |
-
----
-
-> 🧠 *让每个企业都看得见自己的AI未来。*
 >
 > *Let every enterprise see its AI future clearly.*
 > 
