@@ -1,0 +1,176 @@
+{
+  "eastern_top10": [
+    {
+      "rank": 1,
+      "province": "广东",
+      "gdp_trillion": 13.0,
+      "platform_name": "广东省公共资源交易中心",
+      "platform_url": "https://www.gdggzy.org.cn",
+      "search_endpoint": "https://www.gdggzy.org.cn/search",
+      "bid_list_url": "https://www.gdggzy.org.cn/TPFront/jyxx/004001/004001001/",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["政府采购", "工程建设", "产权交易", "土地矿权"]
+    },
+    {
+      "rank": 2,
+      "province": "江苏",
+      "gdp_trillion": 12.0,
+      "platform_name": "江苏省公共资源交易中心",
+      "platform_url": "http://jsggzy.jiangsu.gov.cn",
+      "search_endpoint": "http://jsggzy.jiangsu.gov.cn/xxxxx",
+      "bid_list_url": "http://jsggzy.jiangsu.gov.cn/xxxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["政府采购", "工程建设项目", "国有产权", "土地使用权"]
+    },
+    {
+      "rank": 3,
+      "province": "山东",
+      "gdp_trillion": 9.0,
+      "platform_name": "山东省公共资源交易中心",
+      "platform_url": "http://ggzy.shandong.gov.cn",
+      "search_endpoint": "http://ggzy.shandong.gov.cn/search",
+      "bid_list_url": "http://ggzy.shandong.gov.cn/Tradeinfo-GGGSList/0-0-0-0-0-0-1",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "产权交易", "药械采购"]
+    },
+    {
+      "rank": 4,
+      "province": "浙江",
+      "gdp_trillion": 8.0,
+      "platform_name": "浙江省公共资源交易服务平台",
+      "platform_url": "http://www.zjpubservice.com",
+      "search_endpoint": "http://www.zjpubservice.com/search",
+      "bid_list_url": "http://www.zjpubservice.com/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "国有资产", "土地使用权"]
+    },
+    {
+      "rank": 5,
+      "province": "河南",
+      "gdp_trillion": 6.0,
+      "platform_name": "河南省公共资源交易中心",
+      "platform_url": "http://www.hnggzy.com",
+      "search_endpoint": "http://www.hnggzy.com/search",
+      "bid_list_url": "http://www.hnggzy.com/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "土地使用权", "国有产权"]
+    },
+    {
+      "rank": 6,
+      "province": "四川",
+      "gdp_trillion": 6.0,
+      "platform_name": "四川省公共资源交易信息网",
+      "platform_url": "http://ggzyjy.sc.gov.cn",
+      "search_endpoint": "http://ggzyjy.sc.gov.cn/search",
+      "bid_list_url": "http://ggzyjy.sc.gov.cn/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "土地矿权", "国有产权"]
+    },
+    {
+      "rank": 7,
+      "province": "湖北",
+      "gdp_trillion": 5.0,
+      "platform_name": "湖北省公共资源交易中心",
+      "platform_url": "http://www.hbggzyfwpt.cn",
+      "search_endpoint": "http://www.hbggzyfwpt.cn/search",
+      "bid_list_url": "http://www.hbggzyfwpt.cn/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "土地使用权", "国有产权"]
+    },
+    {
+      "rank": 8,
+      "province": "福建",
+      "gdp_trillion": 5.0,
+      "platform_name": "福建省公共资源交易电子公共服务平台",
+      "platform_url": "https://ggzyfw.fujian.gov.cn",
+      "search_endpoint": "https://ggzyfw.fujian.gov.cn/search",
+      "bid_list_url": "https://ggzyfw.fujian.gov.cn/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "土地使用权", "国有产权"]
+    },
+    {
+      "rank": 9,
+      "province": "湖南",
+      "gdp_trillion": 5.0,
+      "platform_name": "湖南省公共资源交易中心",
+      "platform_url": "https://ggzy.hunan.gov.cn",
+      "search_endpoint": "https://ggzy.hunan.gov.cn/search",
+      "bid_list_url": "https://ggzy.hunan.gov.cn/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "国有产权", "土地使用权"]
+    },
+    {
+      "rank": 10,
+      "province": "上海",
+      "gdp_trillion": 4.0,
+      "platform_name": "上海市公共资源交易中心",
+      "platform_url": "http://ggzyjy.sh.gov.cn",
+      "search_endpoint": "http://ggzyjy.sh.gov.cn/search",
+      "bid_list_url": "http://ggzyjy.sh.gov.cn/xxxx",
+      "api_available": false,
+      "search_method": "web_scrape",
+      "categories": ["工程建设", "政府采购", "土地出让", "国有产权"]
+    }
+  ],
+  "central_enterprises": [
+    {
+      "name": "中国招标投标公共服务平台",
+      "url": "http://www.cebpubservice.com",
+      "type": "国家级",
+      "search_url": "http://www.cebpubservice.com/search"
+    },
+    {
+      "name": "中国政府采购网",
+      "url": "http://www.ccgp.gov.cn",
+      "type": "政府采购",
+      "search_url": "http://www.ccgp.gov.cn/search"
+    },
+    {
+      "name": "中国石化电子招标投标平台",
+      "url": "https://bidding.sinopec.com",
+      "type": "央企",
+      "search_url": "https://bidding.sinopec.com/search"
+    },
+    {
+      "name": "国家电网电子商务平台",
+      "url": "https://ecp.sgcc.com.cn",
+      "type": "央企",
+      "search_url": "https://ecp.sgcc.com.cn/search"
+    },
+    {
+      "name": "中国移动采购与招标网",
+      "url": "https://b2b.10086.cn",
+      "type": "央企",
+      "search_url": "https://b2b.10086.cn/search"
+    },
+    {
+      "name": "中国联通采购与招标网",
+      "url": "https://www.chinaunicombidding.cn",
+      "type": "央企",
+      "search_url": "https://www.chinaunicombidding.cn/search"
+    },
+    {
+      "name": "中国电信阳光采购网",
+      "url": "https://caigou.chinatelecom.com.cn",
+      "type": "央企",
+      "search_url": "https://caigou.chinatelecom.com.cn/search"
+    }
+  ],
+  "industry_keywords": {
+    "福利采购": ["福利", "慰问品", "节日", "生日", "工会", "员工关怀"],
+    "弹性福利": ["弹性福利", "福利平台", "积分", "自选", "商城"],
+    "IT服务": ["信息化", "系统集成", "软件开发", "运维", "技术"],
+    "咨询服务": ["咨询", "培训", "管理", "顾问", "策划"],
+    "办公用品": ["办公用品", "耗材", "文具", "设备", "家具"],
+    "营销服务": ["营销", "广告", "推广", "品牌", "设计"]
+  }
+}
