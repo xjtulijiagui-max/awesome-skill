@@ -1,0 +1,128 @@
+{
+  "cases": {
+    "finance": [
+      {
+        "company": "平安人寿",
+        "scenario": "智能核保",
+        "result": "核保规则引擎上线，处理效率提升80%+",
+        "tags": ["保险", "核保", "效率提升"]
+      },
+      {
+        "company": "平安银行",
+        "scenario": "智能客服与风控",
+        "result": "NLP模型实现贷后管理自动化",
+        "tags": ["银行", "客服", "风控"]
+      },
+      {
+        "company": "中国平安",
+        "scenario": "1+N AI战略",
+        "result": "嵌入四大生态，理赔自动化率突破80%",
+        "tags": ["保险", "战略", "理赔"]
+      }
+    ],
+    "technology": [
+      {
+        "company": "微软",
+        "scenario": "Copilot战略",
+        "result": "通过生产力场景嵌入，形成默认即AI的使用习惯",
+        "tags": ["科技", "Copilot", "生产力"]
+      },
+      {
+        "company": "谷歌",
+        "scenario": "AI文化转型",
+        "result": "从数据驱动到AI原生的组织演进",
+        "tags": ["科技", "组织变革", "文化"]
+      },
+      {
+        "company": "阿里巴巴",
+        "scenario": "知识中台",
+        "result": "沉淀20万+知识条目供AI调用",
+        "tags": ["科技", "知识库", "中台"]
+      }
+    ],
+    "manufacturing": [
+      {
+        "company": "特斯拉",
+        "scenario": "自动驾驶",
+        "result": "感知-决策-执行全链条AI设计",
+        "tags": ["制造", "自动驾驶", "AI设计"]
+      },
+      {
+        "company": "华为",
+        "scenario": "三层五阶八步",
+        "result": "AI战略到执行的完整方法论",
+        "tags": ["制造", "方法论", "战略落地"]
+      },
+      {
+        "company": "华润集团",
+        "scenario": "AI组织升级",
+        "result": "传统央企数字化变革全景复盘",
+        "tags": ["制造", "央企", "组织变革"]
+      }
+    ],
+    "scenario": [
+      {
+        "company": "抖音",
+        "scenario": "评论截流",
+        "result": "工作流优化，存量商机转化",
+        "tags": ["互联网", "运营", "工作流"]
+      },
+      {
+        "company": "某企业",
+        "scenario": "流程制度助手",
+        "result": "退回率18%→11%",
+        "tags": ["通用", "流程优化", "效率"]
+      },
+      {
+        "company": "华航",
+        "scenario": "MOT关键时刻",
+        "result": "利润增长10倍",
+        "tags": ["航空", "客户体验", "关键时刻"]
+      },
+      {
+        "company": "电子政务",
+        "scenario": "AI辅助审批",
+        "result": "退单率降50%，一次办成率85%+",
+        "tags": ["政务", "审批", "效率"]
+      },
+      {
+        "company": "三丰对虾贸易",
+        "scenario": "SCAMPER创新",
+        "result": "业务模式创新突破",
+        "tags": ["贸易", "创新", "SCAMPER"]
+      },
+      {
+        "company": "某银行",
+        "scenario": "会议纪要智能体",
+        "result": "录音→转写→摘要→待办，全流程自动化",
+        "tags": ["金融", "智能体", "效率", "扣子Coze"]
+      },
+      {
+        "company": "某制造企业",
+        "scenario": "日报生成器",
+        "result": "自动汇总数据→生成图文日报，节省2小时/天",
+        "tags": ["制造", "智能体", "自动化", "RPA"]
+      },
+      {
+        "company": "某物业公司",
+        "scenario": "智能客服Agent",
+        "result": "80%常见问题自动回复，复杂问题智能转人工",
+        "tags": ["物业", "智能体", "客服", "扣子Coze"]
+      }
+    ],
+    "energy": [
+      {
+        "company": "深圳水务",
+        "scenario": "专家Agent",
+        "result": "水务行业AI提效实践",
+        "tags": ["水务", "专家Agent", "提效"]
+      },
+      {
+        "company": "新奥燃气",
+        "scenario": "AI赋能",
+        "result": "能源行业AI提效实践",
+        "tags": ["燃气", "能源", "提效"]
+      }
+    ]
+  }
+}

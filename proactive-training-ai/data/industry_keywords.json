@@ -1,0 +1,156 @@
+{
+  "industries": {
+    "banking": {
+      "keywords": ["银行", "金融", "信贷", "风控", "客服", "理财", "证券", "保险"],
+      "recommended_courses": ["ai_organization_change", "ai_scenario_innovation"],
+      "specific_cases": [
+        "平安人寿智能核保：核保规则引擎上线，处理效率提升80%+",
+        "平安银行智能客服与风控：NLP模型实现贷后管理自动化",
+        "中国平安1+N AI战略：嵌入四大生态，理赔自动化率突破80%"
+      ],
+      "customization_points": [
+        "结合银行科技/互联网实际案例",
+        "强调大模型在金融合规中的应用",
+        "突出AI在风险控制中的价值"
+      ]
+    },
+    "manufacturing": {
+      "keywords": ["制造", "生产", "工艺", "质量", "半导体", "芯片", "特斯拉", "华为"],
+      "recommended_courses": ["ai_scenario_innovation", "ai_organization_change"],
+      "specific_cases": [
+        "特斯拉自动驾驶场景拆解：感知-决策-执行全链条AI设计",
+        "华为三层五阶八步实践：AI战略到执行的完整方法论",
+        "华润集团AI组织升级：传统央企数字化变革全景复盘"
+      ],
+      "customization_points": [
+        "聚焦生产/质量/工艺场景",
+        "强调AI在降本增效中的量化价值",
+        "结合工业互联网平台应用"
+      ]
+    },
+    "insurance": {
+      "keywords": ["保险", "核保", "理赔", "精算", "代理人"],
+      "recommended_courses": ["ai_organization_change", "ai_leadership"],
+      "specific_cases": [
+        "平安人寿智能核保：处理效率提升80%+",
+        "中国平安理赔自动化率突破80%",
+        "保险行业AI场景地图：客服/风控/营销/运营全链落地"
+      ],
+      "customization_points": [
+        "突出核保理赔自动化场景",
+        "强调代理人赋能与培训",
+        "结合保险监管合规要求"
+      ]
+    },
+    "technology": {
+      "keywords": ["科技", "IT", "软件", "互联网", "研发", "程序员", "技术"],
+      "recommended_courses": ["ai_scenario_innovation", "ai_organization_change"],
+      "specific_cases": [
+        "微软Copilot战略：通过生产力场景嵌入，形成默认即AI的使用习惯",
+        "谷歌AI文化转型：从数据驱动到AI原生的组织演进",
+        "阿里巴巴知识中台：沉淀20万+知识条目供AI调用"
+      ],
+      "customization_points": [
+        "强调AI辅助编程和代码生成",
+        "突出技术团队AI工具链建设",
+        "结合DevOps和敏捷开发"
+      ]
+    },
+    "design": {
+      "keywords": ["设计", "创意", "AIGC", "Midjourney", "Stable Diffusion", "美工", "UI", "平面"],
+      "recommended_courses": ["ai_scenario_innovation"],
+      "specific_cases": [
+        "即梦/Midjourney文生图实战",
+        "设计工作流AI化改造",
+        "创意提效案例：从概念图到效果图"
+      ],
+      "customization_points": [
+        "聚焦AIGC工具实操（Midjourney/SD/即梦）",
+        "强调设计效率提升和创意突破",
+        "结合具体设计场景（平面/UI/产品）"
+      ]
+    },
+    "property": {
+      "keywords": ["物业", "服务", "项目经理", "客服", "运营", "融创"],
+      "recommended_courses": ["ai_scenario_innovation", "xisha_fishing"],
+      "specific_cases": [
+        "物业服务AI提效场景",
+        "项目经理高频工作AI化",
+        "客户满意度提升案例"
+      ],
+      "customization_points": [
+        "聚焦物业高频场景（客服/工单/巡检）",
+        "强调一线员工易用性",
+        "突出服务质量和效率提升"
+      ]
+    },
+    "energy": {
+      "keywords": ["能源", "水务", "燃气", "电力", "石油", "新奥"],
+      "recommended_courses": ["ai_organization_change", "ai_scenario_innovation"],
+      "specific_cases": [
+        "深圳水务专家Agent落地",
+        "新奥燃气能源行业AI提效",
+        "能源行业知识库建设"
+      ],
+      "customization_points": [
+        "结合能源行业安全和合规",
+        "强调设备维护和预测性分析",
+        "突出专家知识沉淀"
+      ]
+    }
+  },
+  "audience_mapping": {
+    "executive": {
+      "keywords": ["高管", "总裁", "CEO", "董事长", "VP", "班子", "领导层"],
+      "recommended_courses": ["ai_strategy_blueprint", "ai_leadership"],
+      "duration": "0.5-1天",
+      "focus": "战略认知、趋势洞察、决策框架"
+    },
+    "management": {
+      "keywords": ["中层", "经理", "主管", "总监", "负责人", "部长"],
+      "recommended_courses": ["ai_leadership", "ai_organization_change"],
+      "duration": "1-2天",
+      "focus": "管理赋能、组织变革、场景落地"
+    },
+    "technical": {
+      "keywords": ["技术", "研发", "工程师", "IT", "程序员", "架构师"],
+      "recommended_courses": ["ai_scenario_innovation", "ai_organization_change"],
+      "duration": "1-2天",
+      "focus": "工具实操、场景落地、技术赋能"
+    },
+    "business": {
+      "keywords": ["业务", "销售", "市场", "运营", "产品经理"],
+      "recommended_courses": ["ai_scenario_innovation"],
+      "duration": "1-2天",
+      "focus": "业务场景、效率提升、创收创新"
+    },
+    "general": {
+      "keywords": ["全员", "员工", "普通", "基层", "大家"],
+      "recommended_courses": ["xisha_fishing"],
+      "duration": "0.5-1天",
+      "focus": "意识觉醒、工具入门、消除恐惧"
+    }
+  },
+  "goal_mapping": {
+    "strategy": {
+      "keywords": ["战略", "规划", "蓝图", "愿景", "方向"],
+      "course": "ai_strategy_blueprint"
+    },
+    "organization": {
+      "keywords": ["组织", "变革", "管理", "人才", "流程"],
+      "course": "ai_organization_change"
+    },
+    "scenario": {
+      "keywords": ["场景", "落地", "业务", "痛点", "应用"],
+      "course": "ai_scenario_innovation"
+    },
+    "leadership": {
+      "keywords": ["领导力", "管理", "赋能", "推动"],
+      "course": "ai_leadership"
+    },
+    "awareness": {
+      "keywords": ["意识", "认知", "普及", "入门", "全员"],
+      "course": "xisha_fishing"
+    }
+  }
+}
