@@ -1,0 +1,104 @@
+[
+  {
+    "name": "新用户首次配置",
+    "input": "我是产品经理，主要出PRD和竞品分析报告",
+    "expected": {
+      "files_created": [
+        "SOUL.md",
+        "USER.md",
+        "IDENTITY.md",
+        "HEARTBEAT.md",
+        "TOOLS.md",
+        "MEMORY.md",
+        "BOOTSTRAP.md"
+      ],
+      "dialog_actions": [
+        "询问职业",
+        "询问输出物",
+        "询问服务对象",
+        "询问协作风格",
+        "生成配置预览",
+        "写入确认"
+      ],
+      "error_handled": false
+    }
+  },
+  {
+    "name": "已有配置的增量更新",
+    "input": "更新：增加企业管理层服务对象，改为执行型协作风格",
+    "context": {
+      "existing_files": [
+        "SOUL.md"
+      ]
+    },
+    "expected": {
+      "files_created": [],
+      "dialog_actions": [
+        "检测到已有配置",
+        "询问增量内容",
+        "增量更新SOUL.md和IDENTITY.md"
+      ],
+      "error_handled": false
+    }
+  },
+  {
+    "name": "极简输入",
+    "input": "我是老师",
+    "expected": {
+      "files_created": [
+        "SOUL.md",
+        "USER.md",
+        "IDENTITY.md",
+        "HEARTBEAT.md",
+        "TOOLS.md",
+        "MEMORY.md",
+        "BOOTSTRAP.md"
+      ],
+      "dialog_actions": [
+        "询问输出物",
+        "询问服务对象",
+        "询问协作风格",
+        "基于职业推断默认值"
+      ],
+      "error_handled": false
+    }
+  },
+  {
+    "name": "带样例的配置",
+    "input": "我是内容创作者，主要出公众号文章和抖音脚本，我风格偏向创意型，附：我平时用飞书文档写稿",
+    "expected": {
+      "files_created": [
+        "SOUL.md",
+        "USER.md",
+        "IDENTITY.md",
+        "HEARTBEAT.md",
+        "TOOLS.md",
+        "MEMORY.md",
+        "BOOTSTRAP.md"
+      ],
+      "dialog_actions": [
+        "确认职业",
+        "确认输出物",
+        "确认服务对象",
+        "确认协作风格",
+        "提取工具偏好（飞书文档）",
+        "生成配置预览"
+      ],
+      "error_handled": false
+    }
+  },
+  {
+    "name": "边界情况：输入矛盾",
+    "input": "我是医生，但主要输出是代码片段",
+    "expected": {
+      "files_created": [],
+      "dialog_actions": [
+        "检测到职业与输出物矛盾",
+        "暂停并列出矛盾点",
+        "等待用户澄清",
+        "不写入任何文件"
+      ],
+      "error_handled": true
+    }
+  }
+]
