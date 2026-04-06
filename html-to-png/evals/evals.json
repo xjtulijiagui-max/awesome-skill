@@ -1,0 +1,91 @@
+{
+  "skill_name": "html-to-png",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have this HTML file for a course brochure. Can you add a button so users can save it as a PNG image? The file is at C:/Users/xjtul/Desktop/2026/3月项目/openclaw素材/招生简章_完整截图版_新版_base64.html",
+      "expected_output": "The HTML file should be modified to include: 1) html2canvas library (v1.4.1) in head, 2) Fixed body width (1200px), 3) A fixed-position screenshot button in bottom-right corner, 4) captureScreenshot() function that generates a 2x scale PNG download. All existing content should remain intact. The button should be hidden during capture.",
+      "files": [
+        "C:/Users/xjtul/Desktop/2026/3月项目/openclaw素材/招生简章_完整截图版_新版_base64.html"
+      ],
+      "assertions": [
+        {
+          "name": "html2canvas included",
+          "check": "File contains html2canvas@1.4.1 script tag in head section",
+          "type": "content_check"
+        },
+        {
+          "name": "fixed body width",
+          "check": "CSS includes body { width: 1200px; margin: 0 auto; } or equivalent",
+          "type": "content_check"
+        },
+        {
+          "name": "screenshot button present",
+          "check": "Fixed-position button with onclick='captureScreenshot()' exists",
+          "type": "content_check"
+        },
+        {
+          "name": "capture function implemented",
+          "check": "captureScreenshot() async function exists with html2canvas call",
+          "type": "content_check"
+        },
+        {
+          "name": "button hidden during capture",
+          "check": "captureScreenshot() includes btn.style.display = 'none' before html2canvas call",
+          "type": "content_check"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I created a simple HTML page with some content. I need to add export-to-image functionality so people can download it as a picture. Here's the HTML: <!DOCTYPE html><html><head><title>Test Page</title></head><body><h1>Hello World</h1><p>This is a test page.</p></body></html>",
+      "expected_output": "A complete HTML file with screenshot functionality added. Should include html2canvas CDN link, CSS for fixed width, screenshot button, and captureScreenshot() function. The original content (h1 and p elements) should be preserved in a screenshot-container div.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "html2canvas library added",
+          "check": "Script tag with html2canvas@1.4.1 CDN is present",
+          "type": "content_check"
+        },
+        {
+          "name": "content wrapper added",
+          "check": "Original content is wrapped in .screenshot-container div",
+          "type": "content_check"
+        },
+        {
+          "name": "button functionality",
+          "check": "Fixed-position button exists and calls captureScreenshot()",
+          "type": "content_check"
+        },
+        {
+          "name": "download functionality",
+          "check": "Function creates blob and triggers download via anchor tag",
+          "type": "content_check"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "This HTML has external images that need to be base64 encoded first. Can you add screenshot functionality and warn me about the image issue? The file is at: /path/to/file-with-external-images.html (assume it has <img src='https://example.com/photo.jpg'>)",
+      "expected_output": "The skill should attempt to add screenshot functionality but WARN the user that external images won't render in the screenshot due to CORS restrictions. It should explain that images need to be converted to base64 data URLs first, and offer to help with that conversion if possible.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "CORS warning provided",
+          "check": "Response mentions CORS issue or external images problem",
+          "type": "content_check"
+        },
+        {
+          "name": "solution suggested",
+          "check": "Response suggests converting images to base64 or explains the limitation",
+          "type": "content_check"
+        },
+        {
+          "name": "html2canvas still added",
+          "check": "Screenshot functionality is still added to the HTML (with warning)",
+          "type": "content_check"
+        }
+      ]
+    }
+  ]
+}
