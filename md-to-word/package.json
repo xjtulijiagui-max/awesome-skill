@@ -1,0 +1,20 @@
+{
+  "name": "md-to-word-skill",
+  "version": "1.0.0",
+  "description": "Convert markdown files to professionally formatted Word documents",
+  "main": "md-to-word.js",
+  "scripts": {
+    "start": "node md-to-word.js"
+  },
+  "keywords": [
+    "markdown",
+    "word",
+    "docx",
+    "converter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^8.5.0"
+  }
+}
