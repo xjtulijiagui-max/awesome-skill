@@ -1,79 +1,152 @@
-# HTML to PNG Screenshot Skill
+# HTML 转高清 PNG · 真浏览器截图技能
 
-A Claude Code skill that automatically adds "Save as PNG" functionality to HTML files.
+> ⛔ **为什么 AI 生图工具（如 GPT-Image-2）不能用来做这件事？**
+>
+> 这是 50+ 次踩坑验证出的核心教训：
+>
+> **GPT-Image-2 / DALL-E 等工具的本质是"根据文字描述重新绘制一张图"，不是"把指定 HTML 原样转成 PNG"。**
+>
+> 两者有根本区别——无论 Prompt 写得多详细，都无法精准还原 HTML 中的版式、字体、卡片布局、圆环图、SVG 图形等元素。
+>
+> 本技能采用**真浏览器整页截图**，100% 还原 HTML 原始版式，才是正确的解决方案。
 
-## What It Does
+---
 
-This skill modifies HTML files to include:
-- A floating "📸 保存为图片" (Save as Image) button
-- One-click screenshot functionality using html2canvas
-- High-resolution (2x) PNG output
-- Full-page capture (no content cutoff)
+## 核心定位
 
-## When to Use
+当用户发送一个 HTML 文件，要求**"1:1 转成高清 PNG"**时，使用本技能。
 
-Trigger this skill when you need to:
-- Add screenshot/export functionality to HTML
-- Convert HTML content to downloadable PNG images
-- Create shareable image versions of web pages
-- Add "save as picture" buttons to HTML documents
+任务本质：**渲染 + 截图**，而不是"重新设计一张图"。
 
-## Key Features
+---
 
-✅ **Full-page screenshots** - Captures entire HTML document, no height limits
-✅ **High resolution** - 2x scale for crisp text on all displays
-✅ **User-friendly** - Simple button with loading indicator
-✅ **No external dependencies** - Uses CDN-hosted html2canvas library
-✅ **Handles complex layouts** - Works with Tailwind, custom CSS, gradients, etc.
+## 核心矛盾：AI 生图 vs 真浏览器截图
 
-## Requirements & Limitations
+| | AI 生图工具（GPT-Image-2 / DALL-E 等） | 真浏览器截图（本技能） |
+|---|---|---|
+| **工作原理** | 根据文字描述生成一张风格相似的图 | 把 HTML 当作画布，完整渲染后截图 |
+| **HTML 版式** | ❌ 无法读取，完全丢失 | ✅ 100% 保留 |
+| **字体精准度** | 用训练风格"模拟接近" | ✅ 原文原文，字体完全一致 |
+| **多列卡片布局** | ❌ 极容易变形、错位、合并 | ✅ 列数不变，比例不变 |
+| **圆环图 / 模型图** | ❌ 只能生成"像"的图，不精准 | ✅ 完整保留，1:1 还原 |
+| **SVG / base64 / icon font** | ❌ 无法识别，会被替换 | ✅ 完全保留 |
+| **渐变 / 阴影 / 圆角** | ⚠️ 随机性大，容易漂移 | ✅ 完全一致 |
+| **长图完整度** | ⚠️ 容易断裂、拼接痕迹明显 | ✅ 完整连续 |
+| **结论** | ❌ 本质是"重绘" | ✅ 本质是"还原" |
 
-⚠️ **Images must be base64-encoded** - External images (https://...) won't render in screenshots due to browser CORS restrictions. Convert images to base64 data URLs before using.
+> 💡 **判断标准：**
+>
+> - 有 HTML + 要求 1:1 精准还原 → 用本技能（真浏览器截图）
+> - 没有 HTML + 只要一张风格类似的海报图 → 用 AI 生图工具
+>
+> **两者的本质区别是"还原"还是"重建"。**
 
-⚠️ **Fixed width required** - The skill sets body width to 1200px for consistent screenshots. Adjust if needed.
+---
 
-## Quick Start
+## 适用场景
 
-1. Install this skill in Claude Code
-2. Provide your HTML file path
-3. The skill will add all necessary code
-4. Open the modified HTML in a browser
-5. Click the floating button to save as PNG
+### ✅ 本技能适合的场景
 
-## Example Usage
+- 商业海报 / 长图原样导出
+- 用户提供了完整 HTML，要求"严格 1:1"、"不要任何变化"
+- HTML 中包含复杂 CSS（flex / grid / 渐变 / 阴影）
+- 包含 SVG、base64 图片、icon font
+- 包含精确的圆环图、流程图、模型图
+- 一行多列卡片布局（3 列、4 列等）
+- 对输出精度、版式一致性有商业级要求
+
+### ❌ 本技能不适合的场景
+
+- 用户只需要"一张看起来像某风格的海报图"（用 AI 生图工具更合适）
+- 用户没有提供 HTML，只有文字描述或参考图
+- 用户需要批量生成多种风格变体（AI 生图工具更高效）
+
+---
+
+## 技术路线
+
+### 首选工具
+
+| 工具 | 说明 |
+|------|------|
+| **Playwright** | Microsoft 官方，稳定性强，商业首选 |
+| **Puppeteer** | Google 官方，Chromium 内核，批量处理友好 |
+
+两者均为**真浏览器内核渲染**，可确保 CSS 布局、字体、SVG、base64、渐变、阴影 100% 还原。
+
+### 关键参数
+
+```js
+// Playwright 示例
+await page.setViewportSize({ width: 1200, height: 3000 })
+await page.goto('file:///path/to/poster.html', { waitUntil: 'networkidle' })
+await page.screenshot({
+  path: 'poster.png',
+  fullPage: true,        // 整页截图
+  type: 'png'
+})
+```
+
+- `fullPage: true`：从顶部到底部完整输出，不截断
+- `deviceScaleFactor: 2/3`：高清倍率，提升清晰度但不改变布局
+- `viewport.width`：必须与 HTML 原始宽度一致，禁止压缩
+
+---
+
+## 操作流程
 
 ```
-You: Add screenshot functionality to my HTML file at ./course-brochure.html
-
-Claude: [Uses this skill to modify the file]
+Step 1  读取 HTML 原文件
+Step 2  识别 HTML 实际画布宽度（如 1200px）
+Step 3  用 Playwright / Puppeteer 加载页面（等待资源加载完成）
+Step 4  核验：多列卡片是否仍保持原始列数
+Step 5  设置 fullPage: true + deviceScaleFactor: 2
+Step 6  整页高清截图，输出 PNG
+Step 7  交付 PNG，必要时附上对照检查
 ```
 
-## Technical Details
+---
 
-- **Library**: html2canvas v1.4.1 (stable, CDN-hosted)
-- **Output format**: PNG (2x resolution)
-- **Browser support**: All modern browsers with Canvas API
-- **File size**: Depends on content; typically 500KB-5MB for full pages
+## 常见错误速查
 
-## File Structure
+| 错误现象 | 根本原因 | 解决方法 |
+|----------|----------|----------|
+| 一行多列变成了单列 | viewport 宽度太窄 | 按 HTML 原始宽度设置 viewport |
+| 海报整体被拉得又高又稀松 | 宽度被压缩导致换行增加 | 保持 HTML 原始宽度截图 |
+| 圆环图变形 / 比例不对 | 宽度变化导致图形缩放 | 固定宽度 + 正确 deviceScaleFactor |
+| 字体、图标模糊 | deviceScaleFactor 设得太低 | 设为 2 或 3 |
+| 底部内容被截断 | 没有用 fullPage | 必须使用 fullPage: true |
+| AI 生图工具输出的图"看起来像但不对" | AI 在"重绘"不是"还原" | 换用真浏览器截图 |
 
-```
-html-to-png/
-├── SKILL.md              # Main skill instructions
-├── README.md             # This file
-├── evals/
-│   └── evals.json        # Test cases for the skill
-└── scripts/
-    └── image-to-base64.js # Optional helper for converting images
-```
+---
 
-## Testing
+## 坑王警示（必读）
 
-The skill includes 3 test cases covering:
-1. Existing HTML with base64 images
-2. Simple HTML from scratch
-3. HTML with external images (CORS warning)
+> 🚫 **不要尝试用 GPT-Image-2 / DALL-E / Midjourney 等 AI 生图工具做 HTML 1:1 还原**
+>
+> 无论 Prompt 写得多详细，以下问题都无法通过调整提示词解决：
+>
+> - HTML 的精确宽度、列数、间距、字体大小 → **无法还原**
+> - SVG / base64 / icon font → **会被替换成其他元素**
+> - 圆环图、模型图等精确图形 → **只能生成"像"的，无法精准还原**
+> - 多卡片横向布局 → **极容易变成单列或错位**
+>
+> 这些不是 Prompt 工程的问题，是**工具原理层面的根本差异**——
+> AI 生图工具生成的是"新图"，而不是"HTML 的 PNG 版本"。
+>
+> **正确路径只有一条：真浏览器截图。**
 
-## Credits
+---
 
-Created using the Skill Creator framework by Anthropic.
+## 关于本技能
+
+本技能基于 50+ 次真实项目踩坑总结，核心价值在于：
+
+1. **明确区分"AI 生图"与"浏览器截图"的本质差异**，避免用错工具
+2. **提供标准化、可复用的 Playwright / Puppeteer 执行方案**
+3. **沉淀多卡片布局保护、viewport 宽度校验等实战检查项**
+4. **让后来者不需要再重复踩坑**
+
+判断标准：
+> **有 HTML 文件 + 要求 1:1 精准还原** → 用本技能（真浏览器截图）
+> **没有 HTML + 只要一张风格类似的海报图** → 用 AI 生图工具

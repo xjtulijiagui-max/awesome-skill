@@ -1,313 +1,415 @@
+# HTML 转高清 PNG Skill（真浏览器 1:1 截图版）
+
+> ⛔ **使用前必读：AI 生图工具（如 GPT-Image-2）不能替代本技能**
+>
+> 这是 50+ 次踩坑验证出的核心教训：
+>
+> **GPT-Image-2 / DALL-E 等工具的本质是"根据文字描述重新绘制一张图"，不是"把指定 HTML 原样转成 PNG"。**
+>
+> 两者有根本区别——无论 Prompt 写得多详细，都无法精准还原 HTML 中的版式、字体、卡片布局、圆环图、SVG 图形等元素。
+>
+> 本技能采用**真浏览器整页截图**，100% 还原 HTML 原始版式，才是正确的解决方案。
+
 ---
-name: html-to-png
-description: Automatically add "Save as PNG" screenshot functionality to HTML files. Use this skill whenever the user mentions: adding screenshot functionality to HTML, converting HTML to images, saving web pages as pictures, creating downloadable screenshots from HTML, adding export-to-image buttons, generating PNG from HTML content, or when they need to capture long scrolling HTML pages as complete images. Also trigger when users mention html2canvas, full-page screenshots, or need to share HTML content as image files.
+
+## 目标
+
+将用户提供的 HTML **原样**转换为高清 PNG 长图海报，要求：
+
+- **绝对以 HTML 为唯一视觉源**
+- **1:1 还原 HTML 的布局、比例、字距、留白、圆角、阴影、渐变、图标、图片**
+- **禁止擅自重排、重绘、改版、美化、替换字体、替换图标、改模块顺序**
+- 输出结果必须是 **高清 PNG**
+- 如用户要求"严格按 HTML""1:1 还原""不要任何变化"，则必须执行 **真浏览器整页截图模式**
+
 ---
 
-# HTML to PNG Screenshot Skill
+## 核心原则
 
-This skill adds one-click "Save as PNG" functionality to HTML files, allowing users to download entire HTML pages as high-resolution images with a single button click.
+### 1. HTML 不是参考图，而是最终版式源文件
 
-## When to Use This Skill
+只要用户给的是 HTML，默认理解为：
 
-Trigger this skill when users ask to:
-- Add screenshot/export functionality to an HTML file
-- Convert HTML content to PNG images
-- Create downloadable images from web pages
-- Add "save as picture" buttons to HTML documents
-- Generate high-resolution screenshots from HTML
-- Capture long/scrolling HTML pages as complete images
+- HTML 就是主画布
+- CSS 就是最终样式
+- 页面中的图片、base64 图片、SVG、字体、阴影、渐变、绝对定位都必须保留
+- 输出 PNG 的任务本质上是 **渲染并截图**，不是"重新设计一张海报"
 
-## Core Implementation Strategy
+### 2. 绝不重做版式
 
-You'll be adding three key components to the HTML file:
+以下行为一律禁止：
 
-1. **html2canvas library** - The engine that captures HTML as canvas
-2. **Fixed-width container** - Ensures consistent screenshot dimensions
-3. **Screenshot button and function** - UI and logic to trigger the capture
+- 根据 HTML 内容"重新排一个更美观版本"
+- 擅自改模块上下顺序
+- 改卡片大小、间距、字重、字号
+- 改圆环图、流程图、模型图位置
+- 改色彩、改背景、改装饰
+- 用新的绘图逻辑替代原 HTML 结构
+- 用截图拼接替代真实整页浏览器渲染
+- 用不支持现代 CSS 的工具强转图片后再修
 
-## Step-by-Step Implementation
+### 3. 真浏览器渲染是唯一优先方案
 
-### Step 1: Add html2canvas Library
+要实现高保真 1:1 输出，**必须优先使用真浏览器内核渲染并整页截图**，首选：
 
-Add this script tag to the `<head>` section, **before the closing `</head>` tag**:
+- **Puppeteer（Google 官方，Chromium）**
+- **Playwright（Microsoft 官方）**
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+这类工具可以最大程度确保：
+
+- CSS 布局一致
+- 渐变、阴影、圆角、透明度一致
+- web font / icon font / SVG / canvas / base64 图片正常渲染
+- `fullPage` 整页截图
+- `deviceScaleFactor` 控制高清输出
+- 与浏览器视觉结果一致
+
+---
+
+## 核心矛盾：AI 生图 vs 真浏览器截图
+
+| | AI 生图工具（GPT-Image-2 / DALL-E 等） | 真浏览器截图（本技能） |
+|---|---|---|
+| **工作原理** | 根据文字描述生成一张风格相似的图 | 把 HTML 当作画布，完整渲染后截图 |
+| **HTML 版式** | ❌ 无法读取，完全丢失 | ✅ 100% 保留 |
+| **字体精准度** | 用训练风格"模拟接近" | ✅ 原文原文，字体完全一致 |
+| **多列卡片布局** | ❌ 极容易变形、错位、合并 | ✅ 列数不变，比例不变 |
+| **圆环图 / 模型图** | ❌ 只能生成"像"的图，不精准 | ✅ 完整保留，1:1 还原 |
+| **SVG / base64 / icon font** | ❌ 无法识别，会被替换 | ✅ 完全保留 |
+| **渐变 / 阴影 / 圆角** | ⚠️ 随机性大，容易漂移 | ✅ 完全一致 |
+| **长图完整度** | ⚠️ 容易断裂、拼接痕迹明显 | ✅ 完整连续 |
+| **结论** | ❌ 本质是"重绘" | ✅ 本质是"还原" |
+
+---
+
+## 允许与禁止的技术路线
+
+### A. 首选路线（必须优先）
+
+#### Puppeteer / Playwright 真浏览器截图
+
+适用场景：
+
+- 长图海报、商业海报
+- 高保真输出
+- 用户明确要求 1:1 还原
+- HTML 中有复杂 CSS / Tailwind / icon font / base64 / SVG / 渐变 / 阴影
+
+结论：**优先级最高，默认方案，商业项目必须优先采用**
+
+---
+
+### B. 不推荐路线（禁止用于 1:1 还原场景）
+
+#### wkhtmltoimage / wkhtmltopdf
+- WebKit 内核老旧，现代 CSS 兼容差
+- Tailwind / flex / grid / 渐变 / 阴影 / 字体可能失真
+
+#### html2canvas / dom-to-image
+- 复杂样式不稳定，跨元素阴影、伪元素、复杂渐变可能不一致
+- 超长海报更容易出问题
+
+#### AI 生图工具（GPT-Image-2 / DALL-E / Midjourney 等）
+- **本质是"重新绘制"，不是"还原 HTML"**
+- 无法读取 HTML 结构、CSS 样式、字体、布局
+- 多卡片横向布局极容易变形
+- 圆环图、模型图、精确图形无法精准还原
+- 生成结果有随机性，无法 1:1 复现
+
+#### 重新用设计软件/代码重绘
+- 本质不是还原，而是重做，极易引入字体、间距、比例偏差
+
+---
+
+## 高清 PNG 输出规范
+
+### 1. 画布宽度
+必须以 HTML 实际画布宽度为准，不得擅自修改。
+
+- 如果 `body` / 主容器宽度是 `1200px`
+- 则浏览器 `viewport.width` 必须与其匹配
+- 不允许压缩为 1000、1080、750 再导出
+- 不允许使用默认 800 / 1024 / 移动端宽度直接截图
+
+### 2. 高清倍率
+- `deviceScaleFactor: 2` 或 `3`
+- 输出高清 PNG
+- **视觉比例必须与原 HTML 保持一致**
+- 只是提升像素密度，不能改变布局
+
+### 3. 整页截图
+- 必须使用 `fullPage: true`
+- 从顶部到页尾完整输出，不遗漏、不分页、不拼接、不截断
+
+### 4. 背景保留
+- 如 HTML 有背景色、渐变、背景图，必须保留，不可默认透明
+
+---
+
+## 强制规则：多卡片横向布局保护
+
+这是 HTML 转 PNG 最容易翻车的问题，必须强制检查。
+
+### 典型错误
+
+HTML 里本来是：
+
+- 一行 3 个卡片 / 一行 4 个卡片 / 多列 grid / flex 横向排布
+
+导出 PNG 后却变成：
+
+- 一行只剩 1 个卡片
+- 整张海报被拉得过高
+- 模块显得又稀疏又松散
+- 文字换行明显变多
+- 完全不像海报，像纵向表单
+
+### 根本原因
+
+- `viewport` 太窄
+- 没按 HTML 固定宽度渲染
+- 把 1200px 画布压缩成 750px 或 800px 再截图
+- grid / flex 在错误宽度下发生自动换列
+
+### 强制要求
+
+- 原本一行 3 个，导出后仍然一行 3 个
+- 原本一行 4 个，导出后仍然一行 4 个
+- 不允许变成"一行一个卡片"
+- 不允许因为截图宽度错误导致模块被强制换行
+
+### 判断标准
+
+最终是否合格，不看"清不清晰"，先看：
+
+- 列数是否与 HTML 一致
+- 卡片宽高比是否基本一致
+- 横向间距是否与 HTML 一致
+- 模块整体疏密关系是否一致
+
+**只要列数变了，就不算 1:1 还原。**
+
+---
+
+## 禁止错误缩放
+
+### 只允许做的事
+- 保持 HTML 原始宽度不变
+- 通过 `deviceScaleFactor` 提高清晰度
+- 使用真浏览器真实渲染后截图
+
+### 明确禁止的事
+- 先把 HTML 缩小，再放大导出
+- 把 1200px 页面压成 750px 再截图
+- 用浏览器页面缩放去"适配"长图
+- 用截图软件二次拉伸放大
+- 用 CSS `transform: scale()` 偷偷改版式后导出
+- **用 AI 生图工具"参考"HTML 生成一张新图**
+
+**高清 = 提高像素密度，不是改变版式宽度。**
+
+---
+
+## 字体与资源处理规则
+
+### 字体
+尽量保证 HTML 中指定字体真实生效，包括 Google Fonts、本地字体栈、`@font-face`、系统字体。等待字体加载完成后再截图。
+
+### 图标
+Font Awesome、iconfont、SVG 图标、base64 图标必须确认渲染完成后再截图。
+
+### 图片
+外链图片、base64 图片、data URI、内嵌 SVG、canvas 绘制结果必须等待资源完成加载。
+
+---
+
+## 外链资源兜底规则
+
+真实执行时可能遇到外链字体加载失败、CDN 图标库无法联网等情况。
+
+### 第一优先级：保住布局
+- 页面宽度不变
+- 主容器比例不变
+- 多列卡片不变单列
+- base64 图片与内嵌资源正常保留
+- 模块位置关系不变
+
+### 第二优先级：尽量保住视觉细节
+在不改布局的前提下，尽量保证字体接近、图标接近、阴影圆角渐变尽量一致。
+
+**即使个别外链字体或 CDN 图标无法完全在线复现，也绝不能为了补救而改动版式。**
+
+---
+
+## 截图前检查清单
+
+在导出 PNG 之前，必须逐项确认：
+
+- [ ] 页面宽度是否与 HTML 设定一致
+- [ ] 主容器是否完整显示
+- [ ] 是否还有资源未加载（字体、图标、图片）
+- [ ] 页面底部是否完整出现
+- [ ] 是否存在横向滚动导致裁切
+- [ ] 是否存在缩放导致元素变形
+- [ ] 是否存在卡片被压扁、拉长、错位
+- [ ] 圆环模型 / 流程图 / 中心图是否完整无变形
+
+### 强制核验项（必须检查）
+- [ ] 卡片区是否仍为原始多列（原本一行 3 个，现在仍是 3 个）
+- [ ] grid / flex 的列数是否与 HTML 一致
+- [ ] 是否出现因为宽度变化导致的额外换行
+- [ ] 海报整体是否因错误宽度而显得过高、过稀疏
+
+---
+
+## 对"严格 1:1"任务的强制执行规则
+
+当用户出现以下任一表达时，进入**强制 1:1 模式**：
+
+> 严格按 html / 绝对 1:1 / 不要任何变化 / 原样输出 / 不要重排 / 不要美化 / 截图对照 / 完全复原 / 不能变形 / 不能压缩 / 必须一致
+
+### 强制 1:1 模式要求
+
+1. 只能用 Puppeteer 或 Playwright 这类真浏览器截图
+2. 不得改 HTML 结构
+3. 不得改 CSS
+4. 不得改文案
+5. 不得改顺序
+6. 不得改尺寸
+7. 不得"优化布局"
+8. 必须输出 PNG
+9. 必须在必要时做截图对照检查
+10. 结论必须以"是否与原 HTML 一致"为标准，而不是"是否更美观"
+11. 必须额外核验多卡片区域是否仍保持原始列数
+
+---
+
+## 截图对照检查规范
+
+### 1. 头部
+- 标题区高度、主标题字号、副标题位置、顶部渐变背景是否一致
+
+### 2. 中部核心图
+- 圆环图 / 模型图 / 流程图是否完整
+- 是否有压缩、拉伸、遮挡，是否仍居中
+- 图文间距是否一致
+
+### 3. 卡片区
+- 卡片宽高比、间距、圆角和阴影
+- 文字是否溢出，是否出现换行差异
+- **是否仍保持原始列数，是否被错误变成单列**
+
+### 4. 底部
+- 页尾模块是否完整，底部留白是否一致，是否被截断
+
+### 5. 整体
+- 宽度是否一致，是否出现横向压缩或纵向拉长
+- **是否因为宽度错误导致整图过高、过稀疏**
+
+---
+
+## 推荐实现方式
+
+### Playwright（首选）
+
+```js
+const { chromium } = require('playwright');
+const browser = await chromium.launch({ headless: true });
+const page = await browser.newPage();
+
+await page.setViewportSize({ width: 1200, height: 3000 });
+await page.goto('file:///path/to/poster.html', { waitUntil: 'networkidle' });
+
+await page.screenshot({
+  path: 'poster.png',
+  fullPage: true,
+  type: 'png'
+});
+
+await browser.close();
 ```
 
-**Why version 1.4.1 specifically?** Later versions may have API changes. This version is battle-tested and stable. Using `latest` is risky as it can break without warning.
+### Puppeteer
 
-### Step 2: Fix Body Width (Critical for Consistency)
+```js
+const puppeteer = require('puppeteer');
+const browser = await puppeteer.launch({ headless: true });
+const page = await browser.newPage();
 
-Add or modify CSS to fix the body width. This prevents screenshots from varying based on browser window size.
+await page.setViewport({
+  width: 1200,
+  height: 3000,
+  deviceScaleFactor: 2
+});
 
-```css
-body {
-    width: 1200px;       /* Fixed canvas width - adjust if needed */
-    margin: 0 auto;
-    overflow-x: hidden;
-}
+await page.goto('file:///path/to/poster.html', { waitUntil: 'networkidle0' });
+
+await page.screenshot({
+  path: 'poster.png',
+  fullPage: true,
+  type: 'png'
+});
+
+await browser.close();
 ```
 
-If the HTML has a main content wrapper, add a container class:
+---
 
-```css
-.screenshot-container {
-    width: 1200px;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
+## 实施步骤标准版
+
+```
+Step 1  读取 HTML 原文件，不改结构、不改样式
+Step 2  识别 HTML 实际画布宽度（如 1200px）
+Step 3  用 Playwright / Puppeteer 加载页面，等待资源完成
+Step 4  核验：多列卡片是否仍保持原始列数
+Step 5  设置 fullPage: true + deviceScaleFactor: 2
+Step 6  整页高清截图，输出 PNG
+Step 7  交付 PNG，必要时附上对照检查
 ```
 
-Wrap the main content in this container:
-```html
-<div class="screenshot-container">
-    <!-- All existing content goes here -->
-</div>
-```
+---
 
-**Why fixed width?** Without this, screenshots will have different dimensions depending on the user's browser size, leading to inconsistent results.
+## 失败教训总结（50+ 次踩坑验证）
 
-### Step 3: Handle Images (CORS Issue - Critical)
+### 教训 1：AI 生图工具是"重绘"，不是"还原"
+GPT-Image-2 / DALL-E 等工具根据 HTML "风格描述"重新生成图片，生成结果是"看起来像同一张海报"，而不是"HTML 原样转 PNG"。这是本质区别，无法通过调整 Prompt 解决。
 
-**Important:** html2canvas cannot capture external images due to CORS restrictions. All images must be embedded as base64 data URLs.
+### 教训 2：不能把"HTML 转 PNG"理解成"根据 HTML 重新做海报"
+这会导致版式偏移、图形失真、用户最在意的核心模型图被改坏。
 
-**Check for external images:**
-```html
-<!-- This will FAIL - external URL -->
-<img src="https://example.com/image.jpg" />
+### 教训 3：不能使用非现代浏览器内核工具硬转
+这会导致 CSS 不兼容，阴影、渐变、字体、flex / grid 失真，商业海报出现肉眼可见差异。
 
-<!-- This WORKS - base64 embedded -->
-<img src="data:image/png;base64,iVBORw0KGgo..." />
-```
+### 教训 4：不能为了"更美观"去改原图
+用户要的是一致、复原、原样，不是"一个新的更漂亮版本"。
 
-**What to do:**
-- If images are already base64: Great, no action needed
-- If images are external URLs: Warn the user that they need to convert images to base64 first
-- For local files: Offer to convert them using a Node.js script
+### 教训 5：宽度不对，整张图就一定不对
+哪怕内容都在，只要宽度变了，卡片比例、字体换行、模块高度、圆环图都会变形，多列卡片会掉成单列。
 
-**Why is this necessary?** Browsers block canvas from accessing cross-origin images for security reasons. html2canvas will either fail or produce blank spaces where external images should be.
+### 教训 6：最常见错误不是"截图失败"，而是"版式被截图宽度悄悄改坏"
+HTML 原本一行多个卡片，导出 PNG 后变成一行一个卡片，整个海报又高又松。解决方法：严格按 HTML 固定宽度渲染 + 真浏览器真实排版 + 只提高清晰度不改画布宽度。
 
-### Step 4: Add the Screenshot Button
+---
 
-Add this fixed-position button just before the closing `</body>` tag:
+## 输出话术规范
 
-```html
-<div id="screenshot-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-    <button onclick="captureScreenshot()" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-        📸 保存为图片
-    </button>
-</div>
-```
+当用户要求严格还原时，执行时应遵循以下口径：
 
-**Why fixed position?** The button stays in a consistent screen location and can be hidden before capturing so it doesn't appear in the screenshot.
+✅ 以原 HTML 为唯一视觉来源
+✅ 不重排、不重绘、不美化
+✅ 使用真浏览器内核整页高清截图
+✅ 输出 PNG
+✅ 重点校验是否存在变形、压缩、裁切、错位
+✅ 重点校验多卡片区域是否仍保持原始横向布局
 
-### Step 5: Add the Capture Function
+❌ 不要说："我帮你重新优化一下布局"
+❌ 不要说："我按内容重做一个更美观版本"
+❌ 不要说："我参考 HTML 做了一张海报"
+❌ 不要说："我大致还原了效果"
+❌ 不要说："我尝试用 GPT-Image-2 生成"
 
-Add this script just before the closing `</body>` tag, after the button:
+---
 
-```html
-<script>
-async function captureScreenshot() {
-    const btn = document.getElementById('screenshot-btn');
-    btn.style.display = 'none'; // Hide button before capture
+## 一句话版本
 
-    // Show loading indicator
-    const loading = document.createElement('div');
-    loading.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 30px 50px; border-radius: 20px; z-index: 10000; font-size: 18px;';
-    loading.textContent = '正在生成图片，请稍候...';
-    document.body.appendChild(loading);
-
-    try {
-        // Detect background color from body
-        const computedStyle = window.getComputedStyle(document.body);
-        const bgColor = computedStyle.backgroundColor;
-
-        const canvas = await html2canvas(document.body, {
-            scale: 2,                    // 2x for high-resolution (Retina displays)
-            useCORS: true,               // Attempt to load cross-origin images
-            allowTaint: true,            // Don't fail if tainted images exist
-            backgroundColor: bgColor,    // Use actual page background
-            logging: false               // Disable console logs
-        });
-
-        // Convert to blob and download
-        canvas.toBlob(function(blob) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'screenshot.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            loading.textContent = '✓ 图片已保存！';
-            setTimeout(() => {
-                loading.remove();
-                btn.style.display = '';
-            }, 2000);
-        }, 'image/png');
-
-    } catch (error) {
-        loading.textContent = '✗ 截图失败: ' + error.message;
-        setTimeout(() => {
-            loading.remove();
-            btn.style.display = '';
-        }, 3000);
-    }
-}
-</script>
-```
-
-**Key parameter explanations:**
-- `scale: 2` - Outputs at 2x resolution for crisp text on high-DPI displays
-- `useCORS: true` - Attempts to load cross-origin images (though base64 is still recommended)
-- `allowTaint: true` - Continues even if some images can't be loaded
-- `backgroundColor` - Prevents transparent backgrounds from turning black in PNG
-- **Do NOT set** `width`, `height`, `windowWidth`, or `windowHeight` - let html2canvas auto-calculate the full page height
-
-### Step 6: Output the Modified File
-
-Save the modified HTML with a clear filename, such as:
-- `original-with-screenshot.html`
-- `original-exportable.html`
-
-## Common Issues and Solutions
-
-| Symptom | Cause | Solution |
-|---------|-------|----------|
-| Screenshot is only one screen height, content is cut off | Setting `height` parameter in html2canvas options | Remove any `height` parameter; let the library auto-calculate |
-| Images appear as blank/white boxes | External images (CORS blocked) | Convert all images to base64 data URLs |
-| Background appears black instead of actual color | `backgroundColor` not set | Detect and set `backgroundColor` from computed style |
-| Button appears in the screenshot | Button not hidden during capture | Ensure `btn.style.display = 'none'` is called before html2canvas |
-| Text shows as boxes/gibberish | Custom fonts not loaded before capture | Wait for fonts: `document.fonts.ready.then(() => { ... })` |
-
-## Complete Template Example
-
-If starting from scratch, use this template structure:
-
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
-    <!-- Fonts (optional) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Tailwind or other CSS frameworks (optional) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2canvas - MUST be in head before closing tag -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <style>
-        * { font-family: 'Noto Sans SC', sans-serif; }
-        body {
-            width: 1200px;
-            margin: 0 auto;
-            background: #YOUR_BACKGROUND_COLOR;
-        }
-        .screenshot-container {
-            width: 1200px;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Content wrapper -->
-    <div class="screenshot-container">
-        <!-- All your content here -->
-        <!-- All images must be base64 encoded -->
-    </div>
-
-    <!-- Screenshot button -->
-    <div id="screenshot-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-        <button onclick="captureScreenshot()" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-            📸 保存为图片
-        </button>
-    </div>
-
-    <script>
-    async function captureScreenshot() {
-        const btn = document.getElementById('screenshot-btn');
-        btn.style.display = 'none';
-        const loading = document.createElement('div');
-        loading.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 30px 50px; border-radius: 20px; z-index: 10000; font-size: 18px;';
-        loading.textContent = '正在生成图片，请稍候...';
-        document.body.appendChild(loading);
-        try {
-            const computedStyle = window.getComputedStyle(document.body);
-            const canvas = await html2canvas(document.body, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: computedStyle.backgroundColor,
-                logging: false,
-            });
-            canvas.toBlob(blob => {
-                const a = Object.assign(document.createElement('a'), {
-                    href: URL.createObjectURL(blob),
-                    download: 'screenshot.png'
-                });
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                loading.textContent = '✓ 图片已保存！';
-                setTimeout(() => { loading.remove(); btn.style.display = ''; }, 2000);
-            }, 'image/png');
-        } catch (e) {
-            loading.textContent = '✗ 截图失败: ' + e.message;
-            setTimeout(() => { loading.remove(); btn.style.display = ''; }, 3000);
-        }
-    }
-    </script>
-</body>
-</html>
-```
-
-## Advanced: Converting External Images to Base64
-
-If the HTML has external images that need to be converted, you can use this Node.js approach:
-
-```javascript
-const fs = require('fs');
-const path = require('path');
-
-function imageToBase64(imagePath) {
-    const ext = path.extname(imagePath).slice(1);
-    const data = fs.readFileSync(imagePath);
-    return `data:image/${ext};base64,${data.toString('base64')}`;
-}
-```
-
-However, for complex cases, recommend the user handle image conversion separately, as this skill focuses on adding the screenshot functionality itself.
-
-## Testing the Implementation
-
-After adding the functionality:
-1. Open the HTML file in a browser
-2. Verify the screenshot button appears in the bottom-right corner
-3. Click the button and wait for the "正在生成图片，请稍候..." message
-4. Check that the PNG downloads successfully
-5. Open the PNG and verify:
-   - All content is captured (no cutoff)
-   - Images render correctly (not blank)
-   - Background color is correct
-   - Text is crisp (2x scale)
-   - The screenshot button does NOT appear in the image
-
-## Summary
-
-When implementing this skill:
-1. Add html2canvas@1.4.1 to `<head>`
-2. Fix body width to prevent layout shifts
-3. Ensure all images are base64-encoded
-4. Add fixed-position screenshot button
-5. Add captureScreenshot() function with proper error handling
-6. Test thoroughly before delivering to user
-
-The key insight is that html2canvas needs specific configuration to work reliably: fixed widths, base64 images, and proper background color handling are essential for success.
+**凡是用户要求 HTML 1:1 转高清 PNG，唯一正确思路就是：把 HTML 当成最终视觉成品，用 Puppeteer / Playwright 这类真浏览器完整渲染后整页截图输出，而不是重新设计。AI 生图工具本质是"重绘"，无法完成这个任务。必须额外检查多卡片区域的横向列数不能被错误截图宽度破坏。**
