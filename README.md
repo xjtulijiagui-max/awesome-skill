@@ -1,105 +1,152 @@
-# Awesome Claude Skills Collection
+# Awesome Skills
 
-这是一个精选的 Claude Code Skills 集合，每个 skill 都经过精心设计和测试。
+> **AI 顾问李家贵的自用 Skills 集合**
+> 欢迎大家使用和交流！
 
-## 📁 目录结构
+这里收集了我在日常 AI 咨询工作中开发的各类实用 Skills，涵盖企业应用、文档处理、营销获客、知识管理等多个领域。
 
-```
-skills/
-├── font-generator/          # 字体风格自适应提示生成器
-└── README.md                # 本文件
-```
+## 💡 设计理念
 
-## 🎨 Available Skills
+这些 Skills 都遵循**实用主义**原则：
+- ✅ **从实战中提炼**：每个 Skill 都在实际项目中验证过
+- ✅ **开箱即用**：最小化配置，直接调用
+- ✅ **可组合使用**：多个 Skills 可以串联完成复杂任务
+- ✅ **持续迭代**：根据使用反馈不断优化
 
-### Font Generator (字体生成器)
+## 📦 Skills 总览
 
-- **位置**: `font-generator/skill.md`
-- **功能**: 根据用户输入的文字内容，智能分析主题、氛围、文化语境，生成专业的字体设计提示词
-- **适用场景**:
-  - 品牌字体设计
-  - 标题字体创意
-  - 海报字体设计
-  - 游戏/动漫标题字体
-- **支持风格**:
-  - 科幻未来类（故障体、数据流、全息）
-  - 复古怀旧类（蒸汽波、酸性字体）
-  - 传统古风类（瘦金体、碑刻、水墨）
-  - 现代简约类（几何、包豪斯）
-  - 手写艺术类（刷字、涂鸦、书法）
-  - 游戏动漫类（像素风、8-bit）
-  - 自然有机类（枯山水、禅意）
+### 🏢 企业应用
 
-#### 使用示例
+| Skill | 功能 | 典型场景 |
+|-------|------|---------|
+| **enterprise-ai-scenario-map** | 企业AI场景地图生成器 | 为企业生成 30+ AI 应用场景规划报告 |
+| **proactive-training-ai** | AI 课程设计 | 从0到1设计 AI 培训课程体系 |
+| **knowledge-extraction** | 企业知识萃取 | 从文档/访谈中提取结构化知识 |
 
-```bash
-# 生成科幻风格字体
-/font-generator "数字梦境"
+### 📄 文档处理
 
-# 生成古风字体
-/font-generator "鲁迅的散文诗"
+| Skill | 功能 | 典型场景 |
+|-------|------|---------|
+| **md-to-word** | Markdown 转 Word | 快速生成专业文档 |
+| **pdf** | PDF 处理 | 提取 PDF 文本和表格 |
+| **pptx** | PowerPoint 生成 | 创建演示文稿 |
+| **docx** | Word 文档操作 | 创建/编辑 Word 文档 |
+| **markitdown** | 通用格式转 Markdown | PDF/Office/图片/音频转 Markdown |
 
-# 生成像素风游戏字体
-/font-generator "像素大战"
-```
+### ✍️ 内容创作
+
+| Skill | 功能 | 典型场景 |
+|-------|------|---------|
+| **bid-proposal-creator** | 招投标文档生成 | 端到端生成标书 |
+| **marketing-huoke-allinone** | 全链路营销文案 | 从定位到执行的一体化文案 |
+| **ip-huoke-wenan** | IP 获客文案 | 打造个人 IP 的内容创作 |
+| **podcast-transcript-txt** | 播客转录 | 音频转文字并整理 |
+
+### 🔧 工具类
+
+| Skill | 功能 | 典型场景 |
+|-------|------|---------|
+| **idea-to-prototype** | 创意到原型 | 快速将想法落地为可交互原型 |
+| **skill-creator** | Skill 创建工具 | 开发自定义 Skills |
+| **html-to-png** | HTML 截图 | 网页转图片 |
+| **workspace-personalizer** | 工作空间配置 | OpenClaw 环境初始化 |
+
+### 🌐 协作平台
+
+| Skill | 功能 | 典型场景 |
+|-------|------|---------|
+| **feishu-lightweight-kb** | 飞书轻量知识库 | 飞书文档检索问答 |
+| **tencent-docs-mcp** | 腾讯文档 MCP | 腾讯文档集成 |
+| **lark-*** (系列) | 飞书全功能 | 文档/表格/日历/审批等 |
 
 ## 🚀 快速开始
 
-### 安装 Skills
-
-1. 克隆本仓库到你的 Claude skills 目录：
-```bash
-cd ~/.claude/skills
-git clone https://github.com/xjtulijiagui-max/awesome-skills.git
-```
-
-2. 或者手动复制单个 skill：
-```bash
-cp -r font-generator ~/.claude/skills/
-```
-
-### 使用 Skills
-
-在 Claude Code 中直接调用：
+### 安装
 
 ```bash
-# 使用字体生成器
-/font-generator "你的文字内容"
+npm install
 ```
 
-## 📝 Skill 开发规范
+### 使用
 
-每个 skill 应包含：
+```bash
+npm start
+```
 
-- ✅ **完整的 frontmatter**（type, name, description）
-- ✅ **清晰的功能描述**
-- ✅ **详细的使用说明**
-- ✅ **丰富的示例**
-- ✅ **错误处理说明**
-- ✅ **更新日志**
+### 调用示例
 
-## 🤝 贡献指南
+```bash
+# 企业应用类
+/enterprise-ai-scenario-map "XX公司AI场景地图"
+/proactive-training-ai "设计AI培训课程"
+/knowledge-extraction "从访谈中萃取知识"
 
-欢迎提交新的 skills！
+# 文档处理类
+/md-to-word "document.md"
+/pdf "extract text from file.pdf"
+/pptx "create presentation"
 
-1. Fork 本仓库
-2. 创建新的 skill 目录
-3. 编写 skill.md 文件
-4. 提交 Pull Request
+# 内容创作类
+/bid-proposal-creator "政府采购项目"
+/marketing-huoke-allinone "新产品上市推广"
+/ip-huoke-wenan "个人品牌定位"
+/podcast-transcript-txt "https://podcast.url/episode"
 
-## 📄 许可证
+# 工具类
+/idea-to-prototype "将创意转为原型"
+/skill-creator "创建新技能"
+
+# 协作平台类
+/feishu-lightweight-kb "搜索飞书文档"
+```
+
+## 🔗 典型工作流
+
+这些 Skills 可以组合使用，形成完整的工作流：
+
+**企业咨询流程：**
+```
+knowledge-extraction (访谈) → enterprise-ai-scenario-map (规划) →
+pptx (汇报) → feishu-lightweight-kb (知识沉淀)
+```
+
+**营销内容生产：**
+```
+ip-huoke-wenan (定位) → marketing-huoke-allinone (文案) →
+md-to-word (文档) → lark-doc (发布)
+```
+
+**课程开发流程：**
+```
+proactive-training-ai (大纲) → knowledge-extraction (素材) →
+pptx (课件) → md-to-word (手册)
+```
+
+## 🛠️ 技术特点
+
+- **语言**: Python + JavaScript
+- **集成**: 飞书、腾讯文档、Claude Code
+- **输出**: Word、PPT、HTML、Markdown、JSON
+- **设计**: 卡片式布局、响应式设计
+
+## 🤝 贡献与交流
+
+这些 Skills 是我在实际工作中开发的工具，欢迎大家：
+
+- ⭐ Star 支持一下
+- 🍴 Fork 修改优化
+- 💬 提出问题和建议
+- 🔧 提交 PR 改进
+
+## 📝 许可证
 
 MIT License
 
-## 👨‍💻 作者
-
-李家贵 (xjtulijiagui-max)
-
-## 🔗 相关链接
-
-- [Claude Code 官方文档](https://github.com/anthropics/claude-code)
-- [Skill 开发指南](https://github.com/anthropics/claude-code/blob/main/docs/skills.md)
-
 ---
 
-⭐ 如果这个项目对你有帮助，请给个 Star！
+**关于李家贵**
+
+AI 顾问，专注企业 AI 应用落地、知识管理、营销自动化。
+联系方式：通过 GitHub Issues
+
+**欢迎试用，欢迎反馈！** 🎉
